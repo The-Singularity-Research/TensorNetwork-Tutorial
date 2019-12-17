@@ -212,7 +212,7 @@ graph G {
     edge [color=blue];
     Tu -- v; 
     edge [color=green];
-    T -- w
+    Tu -- w
 }
 ```
 
