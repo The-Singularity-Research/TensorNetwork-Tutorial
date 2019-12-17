@@ -220,7 +220,7 @@ At intermediate states of a computation, it’s very common for two nodes to hav
 
 The methods contract_between or contract_parallel will do this for you automatically. You should see huge speedups when comparing these methods against contracting one edge at a time.
 
-``python
+```python
 def one_edge_at_a_time(a, b):
   node1 = tn.Node(a)
   node2 = tn.Node(b)
