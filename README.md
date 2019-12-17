@@ -206,9 +206,34 @@ graph G {
 
 ![image3](image3.png)
 
+```
+graph G {
+    node [style=filled,color=pink]; 
+    edge [color=blue];
+    Tu -- v; 
+    edge [color=green];
+    T -- w
+}
+```
+
 ![image4](image4.png)
 
+```
+graph G {
+    node [style=filled,color=pink]; 
+    edge [color=green];
+    Tuv -- w
+}
+```
+
 ![image5](image5.png)
+
+```
+graph G {
+    node [style=filled,color=pink]; 
+    Tuvw
+}
+```
 
 ![image6](image6.png)
 
