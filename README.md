@@ -191,14 +191,6 @@ plt.show()
 
 ![image2](image2.png)
 
-![image3](image3.png)
-
-![image4](image4.png)
-
-![image5](image5.png)
-
-![image6](image6.png)
-
 ### Example Graphviz Code
 ```
 graph G {
@@ -211,6 +203,14 @@ graph G {
     T -- w
 }
 ```
+
+![image3](image3.png)
+
+![image4](image4.png)
+
+![image5](image5.png)
+
+![image6](image6.png)
 
 ```python
 a = tn.Node(np.eye(2))
