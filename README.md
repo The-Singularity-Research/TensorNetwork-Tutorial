@@ -1,5 +1,6 @@
 # TensorNetwork-Tutorial
 Tutorial on using Google's TensorNetwork library
+Note: Typing the $LaTeX$ into a markdown cell in [Typora](https://www.typora.io/) or a [Jupyter notebook](https://jupyter.org/) for example, will render the math properly
 
 ```python
 !pip install tensornetwork jax jaxlib
