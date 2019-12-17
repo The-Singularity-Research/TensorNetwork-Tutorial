@@ -200,9 +200,140 @@ plt.show()
 ![image6](image6.png)
 
 
+```python
+a = tn.Node(np.eye(2))
+# Notice that a[0] is actually an "Edge" type.
+print("The type of a[0] is:", type(a[0]))
+# This is a dangling edge, so this method will 
+print("Is a[0] dangling?:", a[0].is_dangling())
+```
+
+```python
+trace_edge = a[0] ^ a[1]
+# Notice now that a[0] and a[1] are actually the same edge.
+print("Are a[0] and a[1] the same edge?:", a[0] is a[1])
+print("Is a[0] dangling?:", a[0].is_dangling())
+```
+
+## Optimized Contractions
+At intermediate states of a computation, it’s very common for two nodes to have multiple edges connecting them. If only one of those edges is contracted, then all of the remaining edges become trace edges. This is usually very inefficient, as the new node will allocate significantly more memory than is ultimately required. Since trace edges only sum the diagonal of the underlying matrix, all of the other values calculated during the first contraction are useless. It is always more efficient to contract all of these edges simultaneously.
+
+The methods contract_between or contract_parallel will do this for you automatically. You should see huge speedups when comparing these methods against contracting one edge at a time.
+
+``python
+def one_edge_at_a_time(a, b):
+  node1 = tn.Node(a)
+  node2 = tn.Node(b)
+  edge1 = node1[0] ^ node2[0]
+  edge2 = node1[1] ^ node2[1]
+  tn.contract(edge1)
+  result = tn.contract(edge2)
+  return result.tensor
+
+def use_contract_between(a, b):
+  node1 = tn.Node(a)
+  node2 = tn.Node(b)
+  node1[0] ^ node2[0]
+  node1[1] ^ node2[1]
+  # This is the same as
+  # tn.contract_between(node1, node2)
+  result = node1 @ node2
+  return result.tensor
+
+a = np.ones((1000, 1000))
+b = np.ones((1000, 1000))
+```
+
+```python
+%%time
+one_edge_at_a_time(a, b)
+```
+
+This contracts the two edges sequentially as viualized in the following two images generated using Graphviz:
 
 
 
+![image7](image7.png)
+
+![image8](image8.png)
+
+```python
+%%time
+use_contract_between(a, b)
+```
+
+![image9](image9.png)
+
+As we can see, the first option took significantly more time to run than the second. This difference becomes much more apparent if we use rank three tensors:
+
+```python
+def one_edge_at_a_time(a, b):
+  node1 = tn.Node(a)
+  node2 = tn.Node(b)
+  edge1 = node1[0] ^ node2[0]
+  edge2 = node1[1] ^ node2[1]
+  edge3 = node1[2] ^ node2[2]
+  tn.contract(edge1)
+  tn.contract(edge2)
+  result = tn.contract(edge3)
+  return result.tensor
+
+def use_contract_between(a, b):
+  node1 = tn.Node(a)
+  node2 = tn.Node(b)
+  node1[0] ^ node2[0]
+  node1[1] ^ node2[1]
+  node1[2] ^ node2[2]
+  # This is the same as
+  # tn.contract_between(node1, node2)
+  result = node1 @ node2
+  return result.tensor
+
+a = np.ones((1000, 1000, 10))
+b = np.ones((1000, 1000, 10))
+```
+
+```python
+%%time
+one_edge_at_a_time(a, b)
+```
+
+This contracts the three edges sequentially as viualized in the following three images generated using Graphviz:
+
+![image10](image10.png)
+
+![image11](image11.png)
+
+![image12](image12.png)
+
+
+```python
+%%time
+use_contract_between(a, b)
+```
+
+![image13](image13.png)
+
+In this case, with rank-3 tensors $\mathbf{a}$ and $\mathbf{b}$, which are $1000 \times 1000 \times 10$ numpy arrays, the speedup is even more significant when using tn.contract_between(node1, node2) as apposed to contracting the edges sequentially. If we were to increase the third diemsnion od the two tensors to $100$ or $1000$ and the computation becomes prohibitively expensive on some hardware. 
+
+## Axis naming
+Sometimes, using the axis number is very inconvient and it can be hard to keep track of the purpose of certain edges. To make it easier, you can optionally add a name to each of the axes of your node. Then you can get the respective edge by indexing using the name instead of the number.
+
+```python
+# Here, a[0] is a['alpha'] and a[1] is a['beta']
+a = tn.Node(np.eye(4), axis_names=['alpha', 'beta'])
+edge = a['alpha'] ^ a['beta']
+result = tn.contract(edge)
+print(result.tensor)
+```
+
+This is equivalent to computing the trace of the matrix 
+
+$\mathbf{a} = \begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 1 \end{pmatrix}$ 
+
+and is represented graphically by connecting the two dangling edges of the node for $\mathbf{a}$ to create a loop, then contracting the loop to obtain a node with no edges, representing the scalar value given by the trace, $Tr(\mathbf{a}) = \sum_{i=0}^3 a_i = 4$. We visualize this again in Graphviz, where the red loop comes from connecting the edge 'alpha" to the edge 'beta':
+
+![image14](image14.png)
 
 
 
