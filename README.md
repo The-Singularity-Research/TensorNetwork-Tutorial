@@ -314,7 +314,7 @@ use_contract_between(a, b)
 
 ![image13](image13.png)
 
-In this case, with rank-3 tensors $\mathbf{a}$ and $\mathbf{b}$, which are $1000 \times 1000 \times 10$ numpy arrays, the speedup is even more significant when using tn.contract_between(node1, node2) as apposed to contracting the edges sequentially. If we were to increase the third diemsnion od the two tensors to $100$ or $1000$ and the computation becomes prohibitively expensive on some hardware. 
+In this case, with rank-3 tensors $\mathbf{a}$ and $\mathbf{b}$, which are $1000 \times 1000 \times 10$ numpy arrays, the speedup is even more significant when using tn.contract_between(node1, node2) as apposed to contracting the edges sequentially. If we were to increase the third dimension of the two tensors to $100$ or $1000$ and the computation becomes prohibitively expensive on some hardware. 
 
 ## Axis naming
 Sometimes, using the axis number is very inconvient and it can be hard to keep track of the purpose of certain edges. To make it easier, you can optionally add a name to each of the axes of your node. Then you can get the respective edge by indexing using the name instead of the number.
