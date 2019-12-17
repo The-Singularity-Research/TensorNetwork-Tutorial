@@ -199,6 +199,18 @@ plt.show()
 
 ![image6](image6.png)
 
+### Example Graphviz Code
+```
+graph G {
+    node [style=filled,color=pink];
+    edge [color=red];
+    T -- u; 
+    edge [color=blue];
+    T -- v; 
+    edge [color=green];
+    T -- w
+}
+```
 
 ```python
 a = tn.Node(np.eye(2))
