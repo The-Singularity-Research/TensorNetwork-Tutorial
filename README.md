@@ -33,7 +33,12 @@ c = tn.Node(np.eye(2))
 dangling_edge1 = a.get_edge(1)
 ```
 
-This creates a conncted edge between the two nodes for $a$ and $b$ by connecting $a[0]$ and $b[0]$:
+```python
+# This is the same as above but for the tensor b
+dangling_edge2 = b[1]
+```
+
+This creates a connected edge between the two nodes for $a$ and $b$ by connecting $a[0]$ and $b[0]$:
 
 $-\bullet - \bullet -$
 
@@ -48,11 +53,6 @@ This creates a node with a loop by connecting the two edges $c[0]$ and $c[1]$ of
 ```python
 # Create a trace edge by connecting a node to itself.
 trace_edge = c[0] ^ c[1]
-```
-
-```python
-# This is the same as above but for the tensor b
-dangling_edge2 = b[1]
 ```
 
 Each vector is represented as a node with one "dangling" edge
@@ -135,7 +135,7 @@ The tensor $\mathbf{T}_{i,j,k}$ is a rank $3$ tensor represented as a $2 \times 
 
 $\mathbf{T} = \begin{pmatrix} \begin{pmatrix} 1 & 2 \\ 3 & 4 \\ 5 & 6 \end{pmatrix} \\ \begin{pmatrix} 1 & 2 \\ 3 & 4 \\ 5 & 6 \end{pmatrix}  \end{pmatrix}$
 
-Here the indices $i$ and $k$ range over the index set $\{1,2\}$, and the index $j$ ranges over $\{1,2,3\}$. The tensor $\mathbf{T}$ can be represented as a node with three dangling edges $T[0], T[1],$ and $T[2]$. The edge $T[1]$ correspnds to the index $j$ and can be connected to a dangling edge of the vector
+Here the indices $i$ and $k$ range over the index set $\{1,2\}$, and the index $j$ ranges over $\{1,2,3\}$. The tensor $\mathbf{T}$ can be represented as a node with three dangling edges $T[0], T[1],$ and $T[2]$. The edge $T[1]$ corresponds to the index $j$ and can be connected to a dangling edge of the vector
 
 $u = \begin{pmatrix}1. \\ 1. \\ 1. \end{pmatrix}$
 
@@ -369,7 +369,7 @@ This is equivalent to computing the trace of the matrix
 
 $\mathbf{a} = \begin{pmatrix} 1 & 0 & 0 & 0\\ 0 & 1 & 0 & 0\\ 0 & 0 & 1 & 0\\ 0 & 0 & 0 & 1 \end{pmatrix}$ 
 
-and is represented graphically by connecting the two dangling edges of the node for $\mathbf{a}$ to create a loop, then contracting the loop to obtain a node with no edges, representing the scalar value given by the trace, $Tr(\mathbf{a}) = \sum_{i=0}^3 a_i = 4$. We visualize this again in Graphviz, where the red loop comes from connecting the edge 'alpha" to the edge 'beta':
+and is represented graphically by connecting the two dangling edges of the node for $\mathbf{a}$ to create a loop, then contracting the loop to obtain a node with no edges, representing the scalar value given by the trace, $Tr(\mathbf{a}) = \sum_{i=0}^3 a_i = 4$. We visualize this again in Graphviz, where the red loop comes from connecting the edge 'alpha' to the edge 'beta':
 
 ![image14](image14.png)
 
